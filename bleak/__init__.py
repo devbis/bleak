@@ -42,13 +42,20 @@ if platform.system() == "Linux":
             raise BleakError(
                 "Bleak requires BlueZ >= 5.43. Found version {0} installed.".format(out)
             )
-
-    from bleak.backends.bluezdbus.scanner import (
-        BleakScannerBlueZDBus as BleakScanner,
-    )  # noqa: F401
-    from bleak.backends.bluezdbus.client import (
-        BleakClientBlueZDBus as BleakClient,
-    )  # noqa: F401
+    if os.environ.get('BLEAK_BACKEND') == 'bluepy':
+        from bleak.backends.bluepy.scanner import (
+            BleakScannerBluePy as BleakScanner,
+        )  # noqa: F401
+        from bleak.backends.bluepy.client import (
+            BleakClientBluePy as BleakClient,
+        )  # noqa: F401
+    else:
+        from bleak.backends.bluezdbus.scanner import (
+            BleakScannerBlueZDBus as BleakScanner,
+        )  # noqa: F401
+        from bleak.backends.bluezdbus.client import (
+            BleakClientBlueZDBus as BleakClient,
+        )  # noqa: F401
 elif platform.system() == "Darwin":
     try:
         from CoreBluetooth import CBPeripheral  # noqa: F401
